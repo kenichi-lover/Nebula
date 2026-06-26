@@ -1,9 +1,22 @@
 from fastapi import FastAPI
-from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from fastapi import Request
+from contextlib import asynccontextmanager
+from app.config.database  import (
+    create_db_and_tables
+)
+from app.routers.board import (
+    router as board_router
+)
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await create_db_and_tables()
+    yield
+
+app = FastAPI(lifespan=lifespan)
+
+app.include_router(board_router)
 
 app.mount(
     "/static",
@@ -11,31 +24,8 @@ app.mount(
     name="static"
 )
 
-templates = Jinja2Templates(
-    directory="templates"
-)
-
-demo_cards = [
-    {
-        "title":"Technical Weekly Meeting",
-        "content":"All staff tech meeting at 3PM",
-        "priority":"high",
-        "category":"Tech",
-        "time":"09:00"
-    },
-    {
-        "title":"Security Drill Notice",
-        "content":"Friday 14:00 Fire Drill",
-        "priority":"medium"
-    }
-]
 
 @app.get("/", name = "home")
-async def dashboard(request: Request):
-    return templates.TemplateResponse(
-        request = request,
-        name = "board.html",
-        context = {
-            "cards": demo_cards
-        }
-    )
+async def dashboard():
+    return {"message": "Hello, World!"}
+
