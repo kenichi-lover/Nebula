@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel
 
 
@@ -10,6 +12,10 @@ class NoticeCreate(BaseModel):
     category: str = "General"
 
     priority: str = "normal"
+
+    pinned: bool = False
+
+    published: bool = True
 
 
 class NoticeRead(BaseModel):
@@ -27,3 +33,7 @@ class NoticeRead(BaseModel):
     priority: str
 
     pinned: bool
+
+    published: bool
+
+    created_at: datetime
