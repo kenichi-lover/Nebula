@@ -44,6 +44,11 @@ class Notice(SQLModel, table=True):
         default=True
     )
 
+    is_deleted: bool = Field(
+        default=False,
+        nullable=False
+    )
+
     created_at: datetime = Field(
         default_factory=datetime.now
     )

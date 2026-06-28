@@ -6,7 +6,8 @@ from fastapi.responses import RedirectResponse
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.services.notice_service import (
     create_notice,
-    get_notice_by_slug
+    get_notice_by_slug,
+    delete_notice
 )
 from app.config.database import get_session
 from app.schemas.notice import NoticeCreate
@@ -30,7 +31,10 @@ async def new_notice(
     return templates.TemplateResponse(
         request=request,
         name="notice_form.html",
-        context={}
+        context={
+            "mode": "create",
+            "card": None
+        }
     )
 
 @router.post("/new", name="notice_create")
@@ -59,7 +63,7 @@ async def create_notice_view(
         )
     except Exception as e:
         logger.error(f"Error creating notice: {e}")
-        return HTTPException(
+        raise HTTPException(
             status_code=500,
             detail="An error occurred while creating the notice."
         ) 
@@ -81,3 +85,79 @@ async def notice_detail(
         name="notice_detail.html",
         context={"card": notice}
     )
+
+
+@router.get("/{slug}/edit", name="notice_edit_form")
+async def edit_notice_form(
+    slug: str,
+    request: Request,
+    session: AsyncSession = Depends(get_session)
+):
+    notice = await get_notice_by_slug(session=session, slug=slug)
+    if not notice:
+        raise HTTPException(status_code=404, detail="Notice not found")
+    return templates.TemplateResponse(
+        request=request,
+        name="notice_form.html",
+        context={
+            "mode": "edit",
+            "card": notice
+        }
+    )
+
+@router.post("/{slug}/edit", name="notice_edit")
+async def edit_notice(
+    slug: str,
+    title: str = Form(..., min_length=1, max_length=200),
+    category: str = Form("General"),
+    priority: str = Form("normal"),
+    content: str = Form(..., min_length=1, max_length=1000),
+    pinned: bool = Form(False),
+    published: bool = Form(True),
+    session: AsyncSession = Depends(get_session)
+):
+    notice = await get_notice_by_slug(session=session, slug=slug)
+    if not notice:
+        raise HTTPException(status_code=404, detail="Notice not found")
+    
+    try:
+        notice.title = title
+        notice.category = category
+        notice.priority = priority
+        notice.content = content
+        notice.pinned = pinned
+        notice.published = published
+        
+        await session.commit()
+        
+        return RedirectResponse(
+            url=router.url_path_for("notice_detail", slug=notice.slug),
+            status_code=303
+        )
+    except Exception as e:
+        logger.error(f"Error updating notice: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while updating the notice."
+        )
+    
+
+@router.post("/{slug}/delete", name="notice_delete")
+async def delete_notice_view(
+    slug: str,
+    session: AsyncSession = Depends(get_session)
+):
+    notice = await get_notice_by_slug(session=session, slug=slug)
+    if not notice:
+        raise HTTPException(status_code=404, detail="Notice not found")
+    
+    try:
+        await delete_notice(session, notice)
+        return RedirectResponse(url="/", status_code=303)
+    except Exception as e:
+        logger.error(f"Error deleting notice: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while deleting the notice."
+        )
+

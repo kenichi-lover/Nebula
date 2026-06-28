@@ -3,477 +3,399 @@
 {% block content %}
 
 <div
-class="
-max-w-5xl
-mx-auto
-mt-8
-p-8
-
-glass-card
-shadow-2xl
-"
+    class="
+        max-w-5xl
+        mx-auto
+        mt-8
+        p-8
+        glass-card
+        shadow-2xl
+    "
 >
 
-<!-- Header -->
-
-<div
-class="
-flex
-flex-col
-md:flex-row
-
-md:items-center
-md:justify-between
-
-gap-4
-mb-8
-"
->
-
-<div>
-
-<h2
-class="
-text-3xl
-font-bold
-
-text-slate-800
-dark:text-white
-"
->
-Create Notice
-</h2>
-
-<p
-class="
-mt-1
-
-text-slate-500
-dark:text-slate-400
-"
->
-Publish a new announcement to Nebula
-</p>
-
-</div>
-
-<div>
-
-<span
-class="
-px-3
-py-1
-
-rounded-full
-
-text-sm
-
-bg-white/20
-dark:bg-slate-800/30
-
-border
-border-white/20
-dark:border-white/10
-
-text-slate-700
-dark:text-slate-300
-"
->
-Draft
-</span>
-
-</div>
-
-</div>
-
-<!-- Divider -->
-
-<div
-class="
-h-px
-mb-8
-
-bg-white/20
-dark:bg-slate-700
-"
-></div>
-
-<!-- Form Card -->
-
-<div
-class="
-glass-card
-p-6
-"
->
-
-<form
-method="post"
-action="/notice/new"
-class="space-y-6"
->
-
-<!-- Title -->
-
-<div>
-
-<label
-class="
-block
-mb-2
-
-text-sm
-font-medium
-
-text-slate-700
-dark:text-slate-300
-"
->
-Title
-</label>
-
-<input
-name="title"
-type="text"
-
-required
-
-placeholder="Notice title..."
-
-class="
-w-full
-
-px-4
-py-3
-
-rounded-2xl
-
-bg-white/20
-dark:bg-slate-900/20
-
-border
-border-white/20
-dark:border-white/10
-
-text-slate-800
-dark:text-white
-
-placeholder:text-slate-500
-dark:placeholder:text-slate-400
-
-outline-none
-
-focus:ring-2
-focus:ring-sky-400/50
-"
-/>
-
-</div>
-
-<!-- Category + Priority -->
-
-<div
-class="
-grid
-grid-cols-1
-md:grid-cols-2
-gap-4
-"
->
-
-<div>
-
-<label
-class="
-block
-mb-2
-
-text-sm
-font-medium
-
-text-slate-700
-dark:text-slate-300
-"
->
-Category
-</label>
-
-<select
-name="category"
-
-class="
-w-full
-
-px-4
-py-3
-
-rounded-2xl
-
-bg-white/20
-dark:bg-slate-900/20
-
-border
-border-white/20
-dark:border-white/10
-
-text-slate-800
-dark:text-white
-
-outline-none
-
-focus:ring-2
-focus:ring-sky-400/50
-"
->
-
-<option value="General">
-General
-</option>
-
-<option value="System">
-System
-</option>
-
-<option value="Development">
-Development
-</option>
-
-<option value="Security">
-Security
-</option>
-
-<option value="Personal">
-Personal
-</option>
-
-</select>
-
-</div>
-
-<div>
-
-<label
-class="
-block
-mb-2
-
-text-sm
-font-medium
-
-text-slate-700
-dark:text-slate-300
-"
->
-Priority
-</label>
-
-<select
-name="priority"
-
-class="
-w-full
-
-px-4
-py-3
-
-rounded-2xl
-
-bg-white/20
-dark:bg-slate-900/20
-
-border
-border-white/20
-dark:border-white/10
-
-text-slate-800
-dark:text-white
-
-outline-none
-
-focus:ring-2
-focus:ring-sky-400/50
-"
->
-
-<option value="low">
-Low
-</option>
-
-<option value="normal" selected>
-Normal
-</option>
-
-<option value="high">
-High
-</option>
-
-</select>
-
-</div>
-
-</div>
-
-<!-- Content -->
-
-<div>
-
-<label
-class="
-block
-mb-2
-
-text-sm
-font-medium
-
-text-slate-700
-dark:text-slate-300
-"
->
-Content
-</label>
-
-<textarea
-name="content"
-
-rows="12"
-
-required
-
-placeholder="Write your notice..."
-
-class="
-w-full
-
-px-4
-py-3
-
-rounded-2xl
-
-bg-white/20
-dark:bg-slate-900/20
-
-border
-border-white/20
-dark:border-white/10
-
-text-slate-800
-dark:text-white
-
-placeholder:text-slate-500
-dark:placeholder:text-slate-400
-
-outline-none
-
-focus:ring-2
-focus:ring-sky-400/50
-"
-></textarea>
-
-</div>
-
-<!-- Pinned -->
-
-<div>
-
-<label
-class="
-flex
-items-center
-gap-3
-
-cursor-pointer
-
-text-slate-700
-dark:text-slate-300
-"
->
-
-<input
-type="checkbox"
-name="pinned"
-
-class="
-w-4
-h-4
-"
-/>
-
-📌 Pin to top
-
-</label>
-
-</div>
-
-<!-- Actions -->
-
-<div
-class="
-flex
-items-center
-justify-end
-gap-3
-pt-4
-"
->
-
-<a
-href="/"
-
-class="
-px-5
-py-3
-
-rounded-2xl
-
-bg-white/15
-dark:bg-slate-800/30
-
-border
-border-white/20
-
-text-slate-700
-dark:text-slate-300
-
-hover:scale-[1.02]
-
-transition-all
-"
->
-Cancel
-</a>
-
-<button
-type="submit"
-
-class="
-px-6
-py-3
-
-rounded-2xl
-
-bg-gradient-to-r
-from-sky-500
-to-cyan-500
-
-text-white
-font-medium
-
-shadow-lg
-
-hover:scale-[1.02]
-
-transition-all
-duration-300
-"
->
-Publish Notice
-</button>
-
-</div>
-
-</form>
-
-</div>
+    <!-- Header -->
+    <div
+        class="
+            flex
+            flex-col
+            md:flex-row
+            md:items-center
+            md:justify-between
+            gap-4
+            mb-8
+        "
+    >
+        <div>
+            <h2
+                class="
+                    text-3xl
+                    font-bold
+                    text-slate-800
+                    dark:text-white
+                "
+            >
+                {% if mode == "edit" %}
+                    Edit Notice
+                {% else %}
+                    Create Notice
+                {% endif %}
+            </h2>
+            <p
+                class="
+                    mt-1
+                    text-slate-500
+                    dark:text-slate-400
+                "
+            >
+                {% if mode == "edit" %}
+                    Update your announcement on Nebula
+                {% else %}
+                    Publish a new announcement to Nebula
+                {% endif %}
+            </p>
+        </div>
+
+        <div>
+            <span
+                class="
+                    px-3
+                    py-1
+                    rounded-full
+                    text-sm
+                    bg-white/20
+                    dark:bg-slate-800/30
+                    border
+                    border-white/20
+                    dark:border-white/10
+                    text-slate-700
+                    dark:text-slate-300
+                "
+            >
+                {% if mode == "edit" %}
+                    Editing
+                {% else %}
+                    Draft
+                {% endif %}
+            </span>
+        </div>
+    </div>
+
+    <!-- Divider -->
+    <div
+        class="
+            h-px
+            mb-8
+            bg-white/20
+            dark:bg-slate-700
+        "
+    ></div>
+
+    <!-- Form Card -->
+    <div
+        class="
+            glass-card
+            p-6
+        "
+    >
+        <form
+            id="notice-form"
+            method="post"
+            {% if mode == "edit" and card %}
+                action="/notice/{{ card.slug }}/edit"
+            {% else %}
+                action="/notice/new"
+            {% endif %}
+            class="space-y-6"
+        >
+
+            <!-- Title -->
+            <div>
+                <label
+                    class="
+                        block
+                        mb-2
+                        text-sm
+                        font-medium
+                        text-slate-700
+                        dark:text-slate-300
+                    "
+                >
+                    Title
+                </label>
+                <input
+                    name="title"
+                    type="text"
+                    required
+                    placeholder="Notice title..."
+                    value="{{ card.title if card else '' }}"
+                    class="
+                        w-full
+                        px-4
+                        py-3
+                        rounded-2xl
+                        bg-white/20
+                        dark:bg-slate-900/20
+                        border
+                        border-white/20
+                        dark:border-white/10
+                        text-slate-800
+                        dark:text-white
+                        placeholder:text-slate-500
+                        dark:placeholder:text-slate-400
+                        outline-none
+                        focus:ring-2
+                        focus:ring-sky-400/50
+                    "
+                />
+            </div>
+
+            <!-- Category + Priority -->
+            <div
+                class="
+                    grid
+                    grid-cols-1
+                    md:grid-cols-2
+                    gap-4
+                "
+            >
+                <div>
+                    <label
+                        class="
+                            block
+                            mb-2
+                            text-sm
+                            font-medium
+                            text-slate-700
+                            dark:text-slate-300
+                        "
+                    >
+                        Category
+                    </label>
+                    <select
+                        name="category"
+                        class="
+                            w-full
+                            px-4
+                            py-3
+                            rounded-2xl
+                            bg-white/20
+                            dark:bg-slate-900/20
+                            border
+                            border-white/20
+                            dark:border-white/10
+                            text-slate-800
+                            dark:text-white
+                            outline-none
+                            focus:ring-2
+                            focus:ring-sky-400/50
+                        "
+                    >
+                        <option value="General" {% if card and card.category == 'General' %}selected{% endif %}>General</option>
+                        <option value="System" {% if card and card.category == 'System' %}selected{% endif %}>System</option>
+                        <option value="Development" {% if card and card.category == 'Development' %}selected{% endif %}>Development</option>
+                        <option value="Security" {% if card and card.category == 'Security' %}selected{% endif %}>Security</option>
+                        <option value="Personal" {% if card and card.category == 'Personal' %}selected{% endif %}>Personal</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label
+                        class="
+                            block
+                            mb-2
+                            text-sm
+                            font-medium
+                            text-slate-700
+                            dark:text-slate-300
+                        "
+                    >
+                        Priority
+                    </label>
+                    <select
+                        name="priority"
+                        class="
+                            w-full
+                            px-4
+                            py-3
+                            rounded-2xl
+                            bg-white/20
+                            dark:bg-slate-900/20
+                            border
+                            border-white/20
+                            dark:border-white/10
+                            text-slate-800
+                            dark:text-white
+                            outline-none
+                            focus:ring-2
+                            focus:ring-sky-400/50
+                        "
+                    >
+                        <option value="low" {% if card and card.priority == 'low' %}selected{% endif %}>Low</option>
+                        <option value="normal" {% if not card or card.priority == 'normal' %}selected{% endif %}>Normal</option>
+                        <option value="high" {% if card and card.priority == 'high' %}selected{% endif %}>High</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div>
+                <label
+                    class="
+                        block
+                        mb-2
+                        text-sm
+                        font-medium
+                        text-slate-700
+                        dark:text-slate-300
+                    "
+                >
+                    Content
+                </label>
+                <textarea
+                    name="content"
+                    rows="12"
+                    required
+                    placeholder="Write your notice..."
+                    class="
+                        w-full
+                        px-4
+                        py-3
+                        rounded-2xl
+                        bg-white/20
+                        dark:bg-slate-900/20
+                        border
+                        border-white/20
+                        dark:border-white/10
+                        text-slate-800
+                        dark:text-white
+                        placeholder:text-slate-500
+                        dark:placeholder:text-slate-400
+                        outline-none
+                        focus:ring-2
+                        focus:ring-sky-400/50
+                    "
+                >{{ card.content if card else '' }}</textarea>
+            </div>
+
+            <!-- Pinned -->
+            <div>
+                <label
+                    class="
+                        flex
+                        items-center
+                        gap-3
+                        cursor-pointer
+                        text-slate-700
+                        dark:text-slate-300
+                    "
+                >
+                    <input
+                        type="checkbox"
+                        name="pinned"
+                        {% if card and card.pinned %}checked{% endif %}
+                        class="
+                            w-4
+                            h-4
+                        "
+                    />
+                    📌 Pin to top
+                </label>
+            </div>
+
+        </form>
+
+        <!-- Actions Bar（在 form 外，避免嵌套） -->
+        <div
+            class="
+                flex
+                items-center
+                justify-between
+                gap-3
+                pt-6
+                mt-6
+                border-t
+                border-white/10
+                dark:border-white/5
+            "
+        >
+            <!-- 左侧：删除（仅编辑模式） -->
+            {% if mode == "edit" and card %}
+            <form
+                method="post"
+                action="/notice/{{ card.slug }}/delete"
+                onsubmit="return confirm('Are you sure you want to delete this notice? This action cannot be undone.');"
+            >
+                <button
+                    type="submit"
+                    class="
+                        px-5
+                        py-3
+                        rounded-2xl
+                        bg-red-500/80
+                        hover:bg-red-600
+                        text-white
+                        font-medium
+                        shadow-lg
+                        hover:scale-[1.02]
+                        transition-all
+                        duration-300
+                    "
+                >
+                🗑️ Delete
+                </button>
+            </form>
+            {% else %}
+            <div></div>
+            {% endif %}
+
+            <!-- 右侧：Cancel + Submit -->
+            <div class="flex items-center gap-3">
+                <a
+                    href="/"
+                    class="
+                        px-5
+                        py-3
+                        rounded-2xl
+                        bg-white/15
+                        dark:bg-slate-800/30
+                        border
+                        border-white/20
+                        text-slate-700
+                        dark:text-slate-300
+                        hover:scale-[1.02]
+                        transition-all
+                    "
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    form="notice-form"
+                    class="
+                        px-6
+                        py-3
+                        rounded-2xl
+                        bg-gradient-to-r
+                        from-sky-500
+                        to-cyan-500
+                        text-white
+                        font-medium
+                        shadow-lg
+                        hover:scale-[1.02]
+                        transition-all
+                        duration-300
+                    "
+                >
+                    {% if mode == "edit" %}
+                        Save Changes
+                    {% else %}
+                        Publish Notice
+                    {% endif %}
+                </button>
+            </div>
+        </div>
+    </div>
 
 </div>
 

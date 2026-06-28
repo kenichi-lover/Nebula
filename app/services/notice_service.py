@@ -17,7 +17,8 @@ async def get_all_notices(
     result = await session.execute(
         select(Notice)
         .where(
-            Notice.published.is_(True)
+            Notice.published.is_(True),
+            Notice.is_deleted.is_(False)
         )
         .order_by(
             Notice.pinned.desc(),
@@ -34,7 +35,8 @@ async def get_notice_by_id(
     result = await session.execute(
         select(Notice)
         .where(
-            Notice.id == notice_id
+            Notice.id == notice_id,
+            Notice.is_deleted.is_(False)
         )
     )
     return result.scalar_one_or_none()
@@ -46,7 +48,8 @@ async def get_notice_by_slug(
     result = await session.execute(
         select(Notice)
         .where(
-            Notice.slug == slug
+            Notice.slug == slug,
+            Notice.is_deleted.is_(False)
         )
     )
     return result.scalar_one_or_none()
@@ -66,7 +69,8 @@ async def delete_notice(
         session: AsyncSession,
         notice: Notice
 ) -> None:
-    await session.delete(notice)
+    notice.is_deleted = True
+    notice.updated_at = datetime.now()
     await session.commit()
 
 
@@ -99,7 +103,8 @@ async def get_notices_by_slug(
     result = await session.execute(
         select(Notice)
         .where(
-            Notice.slug == slug
+            Notice.slug == slug,
+            Notice.is_deleted.is_(False)
         )
     )
     return result.scalar_one_or_none()

@@ -239,11 +239,10 @@ Completed:
 
 ✓ Glass UI
 
+✓ Notice Detail
+
+✓ Edit Notice
 Planned:
-
-□ Notice Detail
-
-□ Edit Notice
 
 □ Delete Notice
 
