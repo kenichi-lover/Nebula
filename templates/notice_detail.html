@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto">
+
+    <h1 class="text-3xl font-bold mb-4">
+        {{ card.title }}
+    </h1>
+
+    <div class="text-sm text-gray-500 mb-6">
+        {{ card.created_at }}
+    </div>
+
+    <div class="prose max-w-none">
+        {{ card.content }}
+    </div>
+
+</div>
+
+{% endblock %}

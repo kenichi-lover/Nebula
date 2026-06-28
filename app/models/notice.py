@@ -1,4 +1,4 @@
-from datetime import datetime, UTC
+from datetime import datetime
 
 from sqlmodel import SQLModel, Field
 
@@ -36,14 +36,18 @@ class Notice(SQLModel, table=True):
         max_length=20
     )
 
-    pinned: bool = False
+    pinned: bool = Field(
+        default=False
+    )
 
-    published: bool = True
+    published: bool = Field(
+        default=True
+    )
 
     created_at: datetime = Field(
-        default_factory=lambda: datetime.now(UTC)
+        default_factory=datetime.now
     )
 
     updated_at: datetime = Field(
-        default_factory=lambda: datetime.now(UTC)
+        default_factory=datetime.now
     )

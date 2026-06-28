@@ -132,7 +132,9 @@ text-slate-800
 dark:text-white
 "
 >
+<a href="{{ url_for('notice_detail', slug=card.slug) }}">
 {{ card.title }}
+</a>
 </h3>
 
 {% if card.priority == "high" %}
