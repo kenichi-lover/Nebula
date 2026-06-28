@@ -91,3 +91,15 @@ async def create_notice(
     await session.commit()
     await session.refresh(notice)
     return notice
+
+async def get_notices_by_slug(
+    session: AsyncSession,
+    slug: str
+) -> Notice | None:
+    result = await session.execute(
+        select(Notice)
+        .where(
+            Notice.slug == slug
+        )
+    )
+    return result.scalar_one_or_none()
