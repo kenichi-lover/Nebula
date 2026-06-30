@@ -1,6 +1,7 @@
 from datetime import datetime
+from typing import Sequence
 
-from sqlmodel import select
+from sqlmodel import select, func, or_
 
 from app.models.notice import Notice
 
@@ -11,22 +12,45 @@ from app.schemas.notice import NoticeCreate
 from app.utils.slug import generate_slug
 
 async def get_all_notices(
-    session: AsyncSession
-) -> list[Notice]:
+    session: AsyncSession,
+    skip: int = 0,
+    limit: int = 10,
+    search: str | None = None
+) -> tuple[Sequence[Notice], int]:
+    """
+    返回: (当前页数据列表, 总条数)
+    """
+    # 基础过滤条件
+    base_where = [
+        Notice.published.is_(True),
+        Notice.is_deleted.is_(False)
+    ]
 
-    result = await session.execute(
-        select(Notice)
-        .where(
-            Notice.published.is_(True),
-            Notice.is_deleted.is_(False)
+    if search:
+        keyword = f"%{search}%"
+        base_where.append(
+            Notice.title.ilike(keyword) |
+            Notice.content.ilike(keyword)
         )
-        .order_by(
-            Notice.pinned.desc(),
-            Notice.created_at.desc()
-        )
+
+    count_stmt = (
+        select(func.count())
+        .select_from(Notice)
+        .where(*base_where)
     )
-    return result.scalars().all()
+    total = await session.execute(count_stmt)
+    total_count = total.scalar_one() or 0
 
+    stmt = (
+        select(Notice)
+        .where(*base_where)
+        .order_by(Notice.pinned.desc(), Notice.created_at.desc())
+        .offset(skip)
+        .limit(limit)
+    )
+    result = await session.execute(stmt)
+    items = result.scalars().all()
+    return items, total_count
 
 async def get_notice_by_id(
         session: AsyncSession,
@@ -108,3 +132,5 @@ async def get_notices_by_slug(
         )
     )
     return result.scalar_one_or_none()
+
+

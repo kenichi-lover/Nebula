@@ -57,13 +57,119 @@ Internal announcements and status updates
 
 </div>
 
+<!-- 搜索表单 + 统计标签 -->
 <div
 class="
 flex
-items-center
+flex-col
+sm:flex-row
+items-start
+sm:items-center
 gap-3
 "
 >
+
+<form
+method="get"
+action="/"
+class="
+flex
+items-center
+gap-2
+"
+>
+
+<input
+type="text"
+name="search"
+value="{{ search }}"
+placeholder="Search title or content..."
+class="
+px-4
+py-2
+
+rounded-xl
+
+text-sm
+
+bg-white/10
+dark:bg-slate-800/30
+
+text-slate-800
+dark:text-white
+
+placeholder-slate-400
+dark:placeholder-slate-500
+
+border
+border-white/20
+dark:border-slate-700
+
+focus:outline-none
+focus:ring-2
+focus:ring-sky-500/50
+
+w-48
+sm:w-64
+transition-all
+"
+>
+
+<button
+type="submit"
+class="
+px-4
+py-2
+
+rounded-xl
+
+text-sm
+font-medium
+
+bg-sky-500/20
+text-sky-300
+
+border
+border-sky-500/30
+
+hover:bg-sky-500/30
+transition-all
+"
+>
+🔍 Search
+</button>
+
+{% if search %}
+<a
+href="/"
+class="
+px-3
+py-2
+
+rounded-xl
+
+text-sm
+
+bg-white/10
+dark:bg-slate-800/30
+
+text-slate-500
+dark:text-slate-400
+
+border
+border-white/20
+dark:border-slate-700
+
+hover:bg-white/20
+dark:hover:bg-slate-700/50
+transition-all
+"
+>
+Clear
+</a>
+{% endif %}
+
+</form>
 
 <span
 class="
@@ -81,12 +187,26 @@ border
 border-white/20
 "
 >
-{{ cards|length }} Cards
+{{ total }} Cards
 </span>
 
 </div>
 
 </div>
+
+<!-- 搜索结果提示 -->
+{% if search %}
+<div
+class="
+text-sm
+
+text-slate-500
+dark:text-slate-400
+"
+>
+Showing results for "<span class="font-medium text-sky-400">{{ search }}</span>"
+</div>
+{% endif %}
 
 <!-- Divider -->
 
@@ -103,6 +223,8 @@ dark:bg-slate-700
 <!-- Cards -->
 
 <div class="space-y-4">
+
+{% if cards %}
 
 {% for card in cards %}
 
@@ -215,7 +337,7 @@ text-slate-600
 dark:text-slate-300
 "
 >
-{{ card.content }}
+{{ card.summary }}
 </p>
 
 <div
@@ -273,6 +395,64 @@ text-amber-400
 </div>
 
 {% endfor %}
+
+{% else %}
+
+<!-- 空状态 -->
+<div
+class="
+glass-card
+p-12
+text-center
+"
+>
+
+<p
+class="
+text-lg
+font-medium
+
+text-slate-600
+dark:text-slate-300
+"
+>
+{% if search %}
+No notices found matching "<span class="text-sky-400">{{ search }}</span>"
+{% else %}
+No notices available
+{% endif %}
+</p>
+
+{% if search %}
+<a
+href="/"
+class="
+inline-block
+mt-4
+px-4
+py-2
+
+rounded-xl
+
+text-sm
+
+bg-sky-500/20
+text-sky-300
+
+border
+border-sky-500/30
+
+hover:bg-sky-500/30
+transition-all
+"
+>
+View all notices
+</a>
+{% endif %}
+
+</div>
+
+{% endif %}
 
 </div>
 

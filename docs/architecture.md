@@ -242,11 +242,12 @@ Completed:
 ✓ Notice Detail
 
 ✓ Edit Notice
+
+✓ Delete Notice
+
+✓ Markdown Support
+
 Planned:
-
-□ Delete Notice
-
-□ Markdown Support
 
 □ Pagination
 

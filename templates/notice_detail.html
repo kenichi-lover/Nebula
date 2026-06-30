@@ -34,8 +34,8 @@
         {{ card.created_at }}
     </div>
 
-    <div class="prose max-w-none">
-        {{ card.content }}
+    <div class="prose max-w-none, dark:prose-invert">
+        {{ content_html | safe }}
     </div>
 
     <!-- 放在 content 底部 -->

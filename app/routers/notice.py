@@ -1,16 +1,20 @@
 import logging
 
-from fastapi import APIRouter, HTTPException,Request, Form, Depends    
+from fastapi import APIRouter, HTTPException,Request, Form, Depends, Query
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.services.notice_service import (
     create_notice,
     get_notice_by_slug,
-    delete_notice
+    delete_notice,
+    get_all_notices
 )
 from app.config.database import get_session
-from app.schemas.notice import NoticeCreate
+from app.schemas.notice import NoticeCreate, NoticeRead
+
+from app.utils.md_renderer import render_markdown
+from app.utils.pagination import PaginatedResponse
 
 logger = logging.getLogger(__name__)
 
@@ -80,10 +84,11 @@ async def notice_detail(
     notice = await get_notice_by_slug(session=session, slug=slug)
     if not notice:
         raise HTTPException(status_code=404, detail="Notice not found")
+    content_html = render_markdown(notice.content)
     return templates.TemplateResponse(
         request=request,
         name="notice_detail.html",
-        context={"card": notice}
+        context={"card": notice, "content_html": content_html}
     )
 
 
@@ -161,3 +166,18 @@ async def delete_notice_view(
             detail="An error occurred while deleting the notice."
         )
 
+
+@router.get("", response_model=PaginatedResponse[NoticeRead])
+async def list_notices(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(10, ge=1, le=100),
+    session: AsyncSession = Depends(get_session)
+):
+    items, total = await get_all_notices(session=session, skip=skip, limit=limit)
+    
+    return PaginatedResponse[NoticeRead].create(
+        items=items,
+        total=total,
+        skip=skip,
+        limit=limit
+    )

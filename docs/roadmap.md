@@ -5,12 +5,12 @@ v0.1 Notice Module
 [x] Create Notice
 [x] Notice List
 [x] Notice Detail
-[ ] Notice Edit
-[ ] Notice Delete
+[x] Notice Edit
+[x] Notice Delete
 
 v0.2 Content Enhancement
 ------------------------
-[ ] Markdown Support
+[x] Markdown Support
 [ ] Pagination
 [ ] Search
 
