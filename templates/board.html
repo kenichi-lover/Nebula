@@ -343,52 +343,50 @@ dark:text-slate-300
 <div
 class="
 mt-4
-
 flex
+flex-wrap
 items-center
+justify-between
 gap-3
-
 text-xs
 "
 >
 
-<span
-class="
-px-2
-py-1
+<div class="flex flex-wrap items-center gap-2">
+    <span
+    class="
+    px-2
+    py-1
 
-rounded-lg
+    rounded-lg
 
-bg-white/10
-dark:bg-slate-800/30
+    bg-white/10
+    dark:bg-slate-800/30
 
-border
-border-white/10
-"
->
-{{ card.category }}
-</span>
+    border
+    border-white/10
+    "
+    >
+    {{ card.category }}
+    </span>
 
-<span
-class="
-text-slate-500
-dark:text-slate-400
-"
->
-Posted {{ card.created_at.strftime("%Y-%m-%d %H:%M") }}
-</span>
+    <span class="text-slate-500 dark:text-slate-400">
+        by <span class="font-medium text-slate-700 dark:text-slate-200">
+            {{ card.author_name }}</span>
+    </span>
 
-{% if card.pinned %}
+    <span class="text-slate-500 dark:text-slate-400">
+        • {{ card.created_at.strftime("%Y-%m-%d %H:%M") }}
+    </span>
+</div>
 
-<span
-class="
-text-amber-400
-"
->
-📌 Pinned
-</span>
-
-{% endif %}
+<div class="flex items-center gap-2">
+    {% if card.pinned %}
+    <span class="text-amber-400">
+        📌 Pinned
+    </span>
+    {% endif %}
+</div>
 
 </div>
 

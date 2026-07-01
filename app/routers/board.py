@@ -6,14 +6,21 @@ from app.services.notice_service import (
     get_all_notices
 )
 from app.utils.md_renderer import strip_markdown
+ 
 router = APIRouter()
+
+
+def _get_author_name(notice) -> str:
+    if not notice.author:
+        return "未知作者"
+    return notice.author.full_name or notice.author.username
 
 templates = Jinja2Templates(
     directory="templates"
 )
 
 
-@router.get("/")
+@router.get("/", name="board")
 async def dashboard(
     request: Request,
     search: str | None = Query(None),
@@ -36,6 +43,7 @@ async def dashboard(
             "priority": notice.priority,
             "pinned": notice.pinned,
             "created_at": notice.created_at,
+            "author_name": _get_author_name(notice),
         })
     return templates.TemplateResponse(
         request=request,

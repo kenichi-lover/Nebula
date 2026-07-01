@@ -6,10 +6,19 @@ from sqlmodel import select, func, or_
 from app.models.notice import Notice
 
 from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.orm import selectinload
 
-from app.schemas.notice import NoticeCreate
+from app.schemas.notice import NoticeCreate, NoticeUpdate
 
 from app.utils.slug import generate_slug
+
+
+def _active_notice_filter() -> list:
+    return [
+        Notice.published.is_(True),
+        Notice.is_deleted.is_(False),
+    ]
+
 
 async def get_all_notices(
     session: AsyncSession,
@@ -21,10 +30,7 @@ async def get_all_notices(
     返回: (当前页数据列表, 总条数)
     """
     # 基础过滤条件
-    base_where = [
-        Notice.published.is_(True),
-        Notice.is_deleted.is_(False)
-    ]
+    base_where = _active_notice_filter()
 
     if search:
         keyword = f"%{search}%"
@@ -43,6 +49,7 @@ async def get_all_notices(
 
     stmt = (
         select(Notice)
+        .options(selectinload(Notice.author))
         .where(*base_where)
         .order_by(Notice.pinned.desc(), Notice.created_at.desc())
         .offset(skip)
@@ -60,7 +67,7 @@ async def get_notice_by_id(
         select(Notice)
         .where(
             Notice.id == notice_id,
-            Notice.is_deleted.is_(False)
+            *_active_notice_filter()[1:],
         )
     )
     return result.scalar_one_or_none()
@@ -73,7 +80,7 @@ async def get_notice_by_slug(
         select(Notice)
         .where(
             Notice.slug == slug,
-            Notice.is_deleted.is_(False)
+            *_active_notice_filter()[1:],
         )
     )
     return result.scalar_one_or_none()
@@ -81,9 +88,17 @@ async def get_notice_by_slug(
 
 async def update_notice(
         session: AsyncSession,
-        notice: Notice
+        notice: Notice,
+        data: NoticeUpdate
 ) -> Notice:
+    notice.title = data.title
+    notice.category = data.category
+    notice.priority = data.priority
+    notice.content = data.content
+    notice.pinned = data.pinned
+    notice.published = data.published
     notice.updated_at = datetime.now()
+    
     session.add(notice)
     await session.commit()
     await session.refresh(notice)
@@ -100,21 +115,20 @@ async def delete_notice(
 
 async def create_notice(
         session: AsyncSession,
-        data: NoticeCreate
+        data: NoticeCreate,
+        author_id: int | None = None
 ) -> Notice:
     slug = generate_slug(data.title)
     existing_notice = await get_notice_by_slug(session, slug)
     if existing_notice:
         slug = f"{slug}-{int(datetime.now().timestamp())}"
+
+    notice_data = data.model_dump()
     notice = Notice(
-        title=data.title,
         slug=slug,
-        content=data.content,
-        published=data.published,
-        pinned=data.pinned,
-        category=data.category,
-        priority=data.priority
-)
+        user_id=author_id,
+        **notice_data,
+    )
     session.add(notice)
     await session.commit()
     await session.refresh(notice)
@@ -128,7 +142,7 @@ async def get_notices_by_slug(
         select(Notice)
         .where(
             Notice.slug == slug,
-            Notice.is_deleted.is_(False)
+            *_active_notice_filter()[1:],
         )
     )
     return result.scalar_one_or_none()

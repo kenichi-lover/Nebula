@@ -1,247 +1,134 @@
 # Nebula
 
-现代化轻量公告板与内容发布平台。
+A lightweight publishing platform built with FastAPI, SQLModel, PostgreSQL and Jinja2.
 
-Nebula 是基于 FastAPI 与 PostgreSQL 构建的自托管信息发布系统，专注于公告、通知、备忘录和动态内容展示。
-
-项目采用现代 Glass UI 设计风格，支持亮色与暗色主题，适合作为个人博客首页、团队公告墙、校园通知系统或内部信息门户。
+Nebula focuses on simplicity, readability and maintainability. It provides a clean content publishing experience suitable for personal blogs, team announcement boards and internal knowledge sharing.
 
 ---
 
-## 项目特点
+## Features
 
-### 简洁
+### Notice Management
 
-专注于内容发布。
+* Create Notice
+* Notice List
+* Notice Detail
+* Edit Notice
+* Soft Delete
+* Markdown Rendering
 
-不做复杂社交功能。
+### Content Enhancement
 
----
+* Pagination
+* Search
 
-### 自托管
+### User System
 
-用户完全掌控数据。
+* User Registration
+* User Login
+* User Logout
+* Session Authentication
 
-支持：
+### User Interface
 
-* Linux
-* Docker
-* VPS
-* NAS
-
-部署简单。
-
----
-
-### 现代化界面
-
-采用：
-
-* Glassmorphism
-* Aurora Background
 * Dark Mode
-* Responsive Design
+* Glass UI
+* Responsive Layout
 
-提供良好的桌面与移动端体验。
+### Database
 
----
-
-### 高性能
-
-基于：
-
-* FastAPI
-* AsyncPG
 * PostgreSQL
-
-支持异步请求与高并发访问。
-
----
-
-## 适用场景
-
-### 个人博客
-
-发布：
-
-* 技术文章
-* 学习笔记
-* 项目日志
+* Alembic Migration
+* SQLModel ORM
 
 ---
 
-### 团队公告板
-
-发布：
-
-* 工作通知
-* 会议安排
-* 项目状态
-
----
-
-### 校园系统
-
-发布：
-
-* 课程通知
-* 活动公告
-* 实验室消息
-
----
-
-### NAS 首页
-
-作为家庭服务器入口页面。
-
-展示：
-
-* 公告
-* 服务状态
-* 快捷入口
-
----
-
-## 技术栈
+## Technology Stack
 
 ### Backend
 
 * FastAPI
 * SQLModel
+* SQLAlchemy Async
 * PostgreSQL
-* AsyncPG
-* Pydantic Settings
+* asyncpg
 
 ### Frontend
 
-* Jinja2
+* Jinja2 Templates
 * TailwindCSS
 * Vanilla JavaScript
 
-### Tooling
+### Deployment
 
-* UV
-* Git
+* Debian Linux
+* Uvicorn
 
 ---
 
-## 项目结构
+## Project Structure
 
 ```text
-nebula/
-
 app/
-
 ├── config/
-│   ├── database.py
-│   └── settings.py
-│
+├── dependencies/
 ├── models/
-│
-├── schemas/
-│
-├── services/
-│
 ├── routers/
-│
+├── schemas/
+├── services/
 └── utils/
 
-static/
-├── css/
-└── js/
-
 templates/
-├── base.html
-├── navbar.html
-└── board.html
-
-main.py
-pyproject.toml
-.env
-README.md
+static/
+docs/
+alembic/
 ```
 
 ---
 
-## 当前功能
+## Installation
 
-### 已完成
+Create virtual environment:
 
-* Dashboard
-* Glass UI
-* Dark Mode
-* Responsive Layout
-* PostgreSQL 集成
-* SQLModel 支持
+```bash
+uv venv
+source .venv/bin/activate
+```
 
----
-
-### 开发中
-
-* Notice CRUD
-* 分类管理
-* 搜索功能
-* 置顶公告
-* Markdown 支持
-
----
-
-### 计划功能
-
-* 用户登录
-* 权限管理
-* 文件上传
-* 富文本编辑器
-* RSS 输出
-* WebSocket 实时刷新
-
----
-
-## 开发启动
-
-安装依赖：
+Install dependencies:
 
 ```bash
 uv sync
 ```
 
-配置环境变量：
-
-```env
-DATABASE_URL=postgresql+asyncpg://user:password@localhost/nebula_db
-```
-
-启动项目：
+Configure environment variables:
 
 ```bash
-uv run fastapi dev main.py
+DATABASE_URL=postgresql+asyncpg://user:password@localhost/nebula
+SECRET_KEY=your-secret-key
 ```
 
-访问：
+Run database migration:
 
-```text
-http://127.0.0.1:8000
+```bash
+alembic upgrade head
+```
+
+Start application:
+
+```bash
+uv run python main.py
 ```
 
 ---
 
-## 设计理念
+## Status
 
-Nebula 不追求庞大复杂的功能。
+Version: 1.0
 
-它更像一块数字公告牌。
+Status: Stable Release
 
-简单。
+Current development mode:
 
-稳定。
-
-易维护。
-
-让信息展示回归本质。
-
----
-
-## License
-
-MIT
+Maintenance
 

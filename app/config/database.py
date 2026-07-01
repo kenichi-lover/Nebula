@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker
 from app.config.settings import settings
 
 from app.models.notice import Notice
+from app.models.user import User
 # 创建异步引擎（连接池由 asyncpg 内部维护）
 engine: AsyncEngine = create_async_engine(
     settings.DATABASE_URL,
@@ -27,7 +28,7 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
     async with async_session_factory() as session:
         try:
             yield session
-            await session.commit()
+            #await session.commit() 这里不做自动 commit ,避免响应发出后才发现异常
         except Exception:
             await session.rollback()
             raise

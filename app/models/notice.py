@@ -1,13 +1,14 @@
 from datetime import datetime
+from sqlmodel import SQLModel, Field, Relationship
+from typing import Optional
 
-from sqlmodel import SQLModel, Field
-
+from app.models.user import User
 
 class Notice(SQLModel, table=True):
 
     __tablename__ = "notices"
 
-    id: int | None = Field(
+    id:  Optional[int] | None = Field(
         default=None,
         primary_key=True
     )
@@ -56,3 +57,7 @@ class Notice(SQLModel, table=True):
     updated_at: datetime = Field(
         default_factory=datetime.now
     )
+
+    # 外键关系
+    user_id: Optional[int] = Field(default=None, foreign_key="users.id")
+    author: Optional["User"] = Relationship(back_populates="notices")

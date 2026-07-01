@@ -1,7 +1,10 @@
-from datetime import datetime, timezone
-from typing import Optional
+from datetime import datetime
+from typing import TYPE_CHECKING, Optional
 
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel, Field, Relationship
+
+if TYPE_CHECKING:
+    from app.models.notice import Notice
 
 
 class User(SQLModel, table=True):
@@ -25,5 +28,8 @@ class User(SQLModel, table=True):
     is_superuser: bool = Field(default=False)    # 管理员
     
     # 时间戳
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now())
+    updated_at: datetime = Field(default_factory=lambda: datetime.now())
+
+    # 反响关系
+    notices: list["Notice"] = Relationship(back_populates="author")

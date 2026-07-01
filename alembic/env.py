@@ -14,7 +14,8 @@ from alembic import context
 
 # 导入你的 SQLModel 模型
 from sqlmodel import SQLModel
-from app.models import Notice, User  # ← 确保导入所有模型，否则不会生成迁移
+from app.models.notice import Notice
+from app.models.user import User  # ← 确保导入所有模型，否则不会生成迁移
 
 # this is the Alembic Config object
 config = context.config

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 class NoticeBase(BaseModel):
     """公共字段，无默认值"""
@@ -31,3 +31,11 @@ class NoticeDetailRead(NoticeRead):
     """详情页继承 Read,追加 updated_at"""
     updated_at: datetime
 
+
+class NoticeUpdate(BaseModel):
+    title: str = Field(..., min_length=1, max_length=200)
+    category: str = "General"
+    priority: str = "normal"
+    content: str = Field(..., min_length=1, max_length=1000)
+    pinned: bool = False
+    published: bool = True
